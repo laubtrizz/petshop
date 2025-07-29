@@ -3,7 +3,6 @@
 #include <string.h>
 #include "petshop.h"
 
-// Funções utilitárias
 void limparBuffer() {
     int c;
     while ((c = getchar()) != '\n' && c != EOF);
@@ -13,7 +12,6 @@ int emailValido(const char *email) {
     return strlen(email) < 80 && strchr(email, '@') != NULL;
 }
 
-// Função de login
 int login() {
     char usuario[20], senha[20];
 
@@ -36,7 +34,6 @@ int login() {
     }
 }
 
-// Mensagens de boas-vindas e menu
 void mensagemBoasVindas() {
     printf("\nBem-vindo ao Sistema do Pet Shop!\n");
 }
@@ -63,7 +60,6 @@ void menuServico() {
     printf("===========================\n");
 }
 
-// Função para cadastrar Pet
 void cadastrarPet() {
     FILE *file = fopen("pets.txt", "a");
     if (!file) {
@@ -94,7 +90,6 @@ void cadastrarPet() {
     printf("Pet cadastrado com sucesso!\n");
 }
 
-// Função para listar Pets
 void listarPets() {
     FILE *file = fopen("pets.txt", "r");
     if (!file) {
@@ -111,7 +106,6 @@ void listarPets() {
     fclose(file);
 }
 
-// Função para editar o cadastro de um Pet
 void editarPet() {
     FILE *file = fopen("pets.txt", "r");
     if (!file) {
@@ -169,7 +163,6 @@ void editarPet() {
     printf("Cadastro atualizado com sucesso.\n");
 }
 
-// Função para excluir um Pet
 void excluirPet() {
     FILE *file = fopen("pets.txt", "r");
     if (!file) {
@@ -200,7 +193,6 @@ void excluirPet() {
     printf("Pet excluido com sucesso.\n");
 }
 
-// Função para marcar um serviço
 void marcarServico() {
     FILE *file = fopen("servicos.txt", "a");
     if (!file) {
@@ -237,7 +229,6 @@ void marcarServico() {
     printf("Servico registrado com sucesso!\n");
 }
 
-// Função para listar os serviços
 void listarServicos() {
     FILE *file = fopen("servicos.txt", "r");
     if (!file) {
@@ -254,7 +245,6 @@ void listarServicos() {
     fclose(file);
 }
 
-// Função principal
 int main() {
     if (!login()) return 0;
 
