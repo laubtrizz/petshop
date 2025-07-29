@@ -90,6 +90,53 @@ void cadastrarPet() {
     printf("Pet cadastrado com sucesso!\n");
 }
 
+void merge(Pet arr[], int l, int m, int r) {
+    int i, j, k;
+    int n1 = m - l + 1;
+    int n2 = r - m;
+
+    Pet L[n1], R[n2];
+
+    for (i = 0; i < n1; i++)
+        L[i] = arr[l + i];
+    for (j = 0; j < n2; j++)
+        R[j] = arr[m + 1 + j];
+
+    i = 0;
+    j = 0;
+    k = l;
+
+    while (i < n1 && j < n2) {
+        if (strcmp(L[i].nome, R[j].nome) <= 0) {
+            arr[k] = L[i];
+            i++;
+        } else {
+            arr[k] = R[j];
+            j++;
+        }
+        k++;
+    }
+
+    while (i < n1) {
+        arr[k] = L[i];
+        i++; k++;
+    }
+
+    while (j < n2) {
+        arr[k] = R[j];
+        j++; k++;
+    }
+}
+
+void mergeSortPets(Pet arr[], int l, int r) {
+    if (l < r) {
+        int m = l + (r - l) / 2;
+        mergeSortPets(arr, l, m);
+        mergeSortPets(arr, m + 1, r);
+        merge(arr, l, m, r);
+    }
+}
+
 void listarPets() {
     FILE *file = fopen("pets.txt", "r");
     if (!file) {
@@ -97,13 +144,25 @@ void listarPets() {
         return;
     }
 
-    Pet p;
-    printf("\n                     Lista de Pets                     \n");
-    while (fscanf(file, "%49[^;];%29[^;];%d;%49[^\n]\n", p.nome, p.especie, &p.idade, p.dono) != EOF) {
-        printf("Nome: %s | Especie: %s | Idade: %d | Dono: %s\n", p.nome, p.especie, p.idade, p.dono);
+    Pet pets[100];
+    int count = 0;
+    while (fscanf(file, "%49[^;];%29[^;];%d;%49[^\n]\n", pets[count].nome, pets[count].especie, &pets[count].idade, pets[count].dono) != EOF) {
+        count++;
+    }
+    fclose(file);
+
+    if (count == 0) {
+        printf("Nenhum pet cadastrado.\n");
+        return;
     }
 
-    fclose(file);
+    mergeSortPets(pets, 0, count - 1);
+
+    printf("\n                   Lista de Pets                   \n");
+    for (int i = 0; i < count; i++) {
+        printf("Nome: %s | Especie: %s | Idade: %d | Dono: %s\n",
+               pets[i].nome, pets[i].especie, pets[i].idade, pets[i].dono);
+    }
 }
 
 void editarPet() {
@@ -267,14 +326,22 @@ int main() {
         printf("Escolha uma opcao: ");
         scanf("%d", &opcao);
         switch (opcao) {
-            case 1: cadastrarPet(); break;
-            case 2: listarPets(); break;
-            case 3: editarPet(); break;
-            case 4: excluirPet(); break;
-            case 5: marcarServico(); break;
-            case 6: listarServicos(); break;
-            case 0: printf("Obrigado por usar o sistema do Pet Shop. Ate logo!  \n"); break;
-            default: printf("Opcao invalida!\n"); break;
+            case 1: cadastrarPet();
+            break;
+            case 2: listarPets();
+            break;
+            case 3: editarPet(); 
+            break;
+            case 4: excluirPet(); 
+            break;
+            case 5: marcarServico(); 
+            break;
+            case 6: listarServicos(); 
+            break;
+            case 0: printf("Obrigado por usar o sistema do Pet Shop. Ate logo!  \n"); 
+            break;
+            default: printf("Opcao invalida!\n");
+            break;
         }
     } while (opcao != 0);
 
